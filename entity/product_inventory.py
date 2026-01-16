@@ -15,7 +15,7 @@ class ProductInventory(object):
 		]
 	
 	
-	def add_supported_unit(self, unit: Unit, conversion_factor: float)
+	def add_supported_unit(self, unit: Unit, conversion_factor: float):
 		if conversion_factor < 0:
 			raise ValueError(f"conversion_factor cannot be negative... you entered '{conversion_factor}'")
 			
@@ -114,4 +114,4 @@ class ProductInventory(object):
 
 
 async def create_product_inventory(sku: str, product_name: str, base_unit: Unit):
-	return ProductInventory(qty=0, sku=sku, product_name=product_name, base_unit=unit)
+	return ProductInventory(qty=0, sku=sku, product_name=product_name, base_unit=base_unit)

@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 
 from entity.product_inventory import create_product_inventory
 from value_object.unit import Unit
@@ -9,13 +10,13 @@ from error import UnsupportedUnitError, UnsupportedChangeTypeError, InvalidQtyEr
 kg_to_bskt = 3.6
 kg_to_bag = 50
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def sample_product_inventory():
-	sample_product_inventory = await create_product_inventory(sku="test_rice", product_name="Rice (test)", base_unit=Unit.KG)
-	sample_product_inventory.add_supported_unit(unit=Unit.BAG, conversion_factor = kg_to_bag)
-	sample_product_inventory.add_supported_unit(unit=Unit.BSKT, conversion_factor = kg_to_bskt)
+	product_inventory = await create_product_inventory(sku="test_rice", product_name="Rice (test)", base_unit=Unit.KG)
+	product_inventory.add_supported_unit(unit=Unit.BAG, conversion_factor = kg_to_bag)
+	product_inventory.add_supported_unit(unit=Unit.BSKT, conversion_factor = kg_to_bskt)
 
-	return sample_product_inventory
+	return product_inventory
 
 
 @pytest.mark.asyncio
