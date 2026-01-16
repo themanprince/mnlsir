@@ -1,5 +1,6 @@
 from uuid import uuid4
 from enum import Enum
+from dataclasses import dataclass
 
 
 class Unit(Enum):
@@ -12,3 +13,9 @@ class Unit(Enum):
 	PKT = uuid4()
 	TUBER = uuid4()
 	BUNCH = uuid4()
+
+
+@dataclass(frozen=True)
+class UnitConversion:
+	unit: Unit
+	conversion_factor: float

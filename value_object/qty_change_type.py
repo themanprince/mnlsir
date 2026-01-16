@@ -3,6 +3,6 @@ from enum import Enum
 
 
 class ChangeType(Enum):
-	INCREASE = uuid4()
-	DECREASE = uuid4()
+	RECEIVE = uuid4()
+	ISSUE = uuid4()
 	ADJUST = uuid4()
