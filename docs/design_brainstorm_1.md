@@ -38,7 +38,8 @@ classDiagram
     
     
    
-    StoreInstance: store_id  
+    StoreInstance: store_id
+    StoreInstance: store_name
     StoreInstance: list_of_product_inventory
     StoreInstance: stock_movement_record
     StoreInstance: receive() updates inventory/stock_movements

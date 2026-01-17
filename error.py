@@ -8,6 +8,3 @@ class UnsupportedChangeTypeError(Exception):
 
 class InvalidQtyError(Exception):
 	pass
-
-class CommercialBreak(Exception):
-	pass
