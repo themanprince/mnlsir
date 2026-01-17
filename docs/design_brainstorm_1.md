@@ -78,5 +78,7 @@ classDiagram
     NOTE: -- So that Received_Entry.mark_done_receiving method is able to stop CRUD operations
     NOTE: on its children, all control of ReceivedNode's creation/update/deletion is given to its parent
     NOTE: -- How should I implement immediate validation of supported unit for ReceivedItem?
+    NOTE: -- Considering performance, should it be done in Received_Entry.mark_done_receiving method
+    NOTE: -- as opposed to attempting to validate units on every item entry
 
 ```
