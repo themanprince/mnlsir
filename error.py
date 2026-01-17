@@ -8,3 +8,7 @@ class UnsupportedChangeTypeError(Exception):
 
 class InvalidQtyError(Exception):
 	pass
+
+
+class UnexistingProduct(Exception):
+	pass

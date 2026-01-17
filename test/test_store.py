@@ -1,6 +1,7 @@
 import pytest
 import pytest_asyncio
 
+from datetime import datetime
 from aggregrate.store import create_store
 from value_object.unit import Unit
 from error import UnsupportedUnitError, InvalidQtyError
@@ -35,14 +36,25 @@ async def test_store_receiving(sample_store):
 	qty_to_receive_product2 = 3
 	
 	await sample_store.receive({
-		product1_sku: {
-			"qty": qty_to_receive_product1,
-			"unit": Unit.BSKT
-		},
-		product2_sku: {
-			"qty": qty_to_receive_product2,
-			"unit": Unit.CTN
-		}
+		"received_entry_id": "test_receive",
+	    "created_at": str(datetime.now()),
+	    "received_at": str(datetime.now()),
+	    "received_from": "RD Enterprises",
+	    "received_by": "Prince Adigwe",
+	    "purpose": None,
+	    "store_id": sample_store.store_id,
+	    "received_products": [
+			{
+				"sku": product1_sku,
+				"qty": qty_to_receive_product1,
+				"unit": Unit.BSKT
+			},
+			{
+				"sku": product2_sku,
+				"qty": qty_to_receive_product2,
+				"unit": Unit.CTN
+			}
+		]
 	})
 	
 	expected_base_unit_qty_product1 = kg_to_bskt * qty_to_receive_product1
@@ -86,4 +98,28 @@ async def test_receive_fails_on_negative_qty(sample_store):
 			}
 		})
 			
-
+@pytest.mark.asyncio
+async def test_fails_on_invalid_store_id(sample_store):
+	with pytest.raises(VaueError):
+		await sample_store.receive({
+		    "store_id": "random",
+			"received_entry_id": "test_receive",
+		    "created_at": str(datetime.now()),
+		    "received_at": str(datetime.now()),
+		    "received_from": "RD Enterprises",
+		    "received_by": "Prince Adigwe",
+		    "purpose": None,
+		    "received_products": [
+				{
+					"sku": product1_sku,
+					"qty": qty_to_receive_product1,
+					"unit": Unit.BSKT
+				},
+				{
+					"sku": product2_sku,
+					"qty": qty_to_receive_product2,
+					"unit": Unit.CTN
+				}
+			]
+		})
+		
