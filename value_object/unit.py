@@ -13,6 +13,7 @@ class Unit(Enum):
 	PKT = uuid4()
 	TUBER = uuid4()
 	BUNCH = uuid4()
+	TIN = uuid4()
 
 
 @dataclass(frozen=True)

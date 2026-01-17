@@ -14,7 +14,6 @@ classDiagram
     GoodsReceived *-- ReceivedEntry: contains one/more received entries
     
     ReceivedEntry --> StoreInstance: updates store's inventory
-    
     Received_Entry o-- ReceivedNodeList: contains one ReceivedNodeList
     ReceivedNodeList *-- ReceivedNode: contains one or more ReceivedNode
     
@@ -25,8 +24,8 @@ classDiagram
     _ReceivedNodeList --> ReceivedNodeList: is
     
    
-   GoodsReceived: create_received_entry()
-   GoodsReceived: received_entries
+    GoodsReceived: create_received_entry()
+    GoodsReceived: received_entries
     
     ReceivedEntry: received_entry_id
     ReceivedEntry: created_at -> timestamp
@@ -38,11 +37,11 @@ classDiagram
     
     
     StoreInstance: store_id
-    StoreInstance:  list_of_product_inventory
+    StoreInstance: store_name
+    StoreInstance: list_of_product_inventory
     StoreInstance: stock_movement_record
     StoreInstance: receive() updates inventory/stock_movements
         
-    
     
     Received_Entry: received_nodes -> ReceivedNodeList
     Received_Entry: get_received_node_list() RETURNS ReceivedNodeList
