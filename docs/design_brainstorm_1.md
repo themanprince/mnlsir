@@ -13,8 +13,7 @@ classDiagram
     
     GoodsReceived *-- ReceivedEntry: contains one/more received entries
     
-    ReceivedEntry --> Store1: updates store's inventory
-    ReceivedEntry --> Store2: updates store's inventory
+    ReceivedEntry --> StoreInstance: updates store's inventory
     
     Received_Entry o-- ReceivedNodeList: contains one ReceivedNodeList
     ReceivedNodeList *-- ReceivedNode: contains one or more ReceivedNode
@@ -38,16 +37,11 @@ classDiagram
     ReceivedEntry: store ref or store_id
     
     
-    Store1: store_id
-    Store1:  list_of_product_inventory
-    Store1: stock_movement_record
-    Store1: receive() updates inventory/stock_movements
-    
-    Store2: store_id  
-    Store2: list_of_product_inventory
-    Store2: stock_movement_record
-    Store2: receive() updates inventory/stock_movements
-    
+    StoreInstance: store_id
+    StoreInstance:  list_of_product_inventory
+    StoreInstance: stock_movement_record
+    StoreInstance: receive() updates inventory/stock_movements
+        
     
     
     Received_Entry: received_nodes -> ReceivedNodeList
