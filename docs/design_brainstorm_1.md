@@ -1,4 +1,12 @@
+### ANALYSIS OF THE DESIGN
+After doing the design diagram, I asked deepseek to cross-check it for correction.  
+It came up with this analysis/explanation, so let me append it as an explanation of the diagram.  
 
+* The purpose of GoodsReceived is to record goods received from suppliers. Each ReceivedEntry is for a specific store (or multiple stores?)
+* The composite pattern (ReceivedNode, ReceivedItem, ReceivedItemGroup) allows grouping of items. This might be to reflect how items are received in groups.
+* The Store aggregate has a list of *product_inventory* and *stock_movement_record*. It has a receive() method to update inventory and stock movements.
+* When a ReceivedEntry is marked as done (*mark_done_receiving()*), it updates the store and disallows further CRUD on its nodes (received items).
+  
 ```mermaid
 
 classDiagram
@@ -21,6 +29,7 @@ classDiagram
    GoodsReceived: create_received_entry()
    GoodsReceived: received_entries
     
+    ReceivedEntry: received_entry_id
     ReceivedEntry: created_at -> timestamp
     ReceivedEntry: received_at -> timestamp [default=created_at]
     ReceivedEntry: received_from -> str [supplier name]
