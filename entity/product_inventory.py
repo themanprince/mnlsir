@@ -88,7 +88,7 @@ class ProductInventory(object):
 		self._check_change_type_OR_raise_err(change_type)
 		
 		if qty < 0:
-			raise InvalidQtyError("Can't use negative Qty")
+			raise InvalidQtyError(f"Tried to pass in negative Qty ({qty})")
 		
 		if unit is None:
 			unit = self.base_unit
@@ -113,5 +113,5 @@ class ProductInventory(object):
 	
 
 
-async def create_product_inventory(sku: str, product_name: str, base_unit: Unit):
-	return ProductInventory(qty=0, sku=sku, product_name=product_name, base_unit=base_unit)
+async def create_product_inventory(sku: str, product_name: str, base_unit: Unit, qty:float=0):
+	return ProductInventory(qty=qty, sku=sku, product_name=product_name, base_unit=base_unit)

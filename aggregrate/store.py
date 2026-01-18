@@ -13,8 +13,8 @@ class Store(object):
 		self._inventory_list = []
 	
 	
-	async def create_product_inventory(self, sku: str, product_name: str, base_unit: Unit):
-		self._inventory_list.append(ProductInventory(qty=0, sku=sku, product_name=product_name, base_unit=base_unit))
+	async def create_product_inventory(self, sku: str, product_name: str, base_unit: Unit, qty = 0):
+		self._inventory_list.append(ProductInventory(qty=qty, sku=sku, product_name=product_name, base_unit=base_unit))
 	
 	
 	def _get_product_inventory_by_sku(self, sku: str):
