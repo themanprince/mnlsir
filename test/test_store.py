@@ -65,7 +65,7 @@ async def test_store_receiving(sample_store):
 	assert store_inventory_snapshot[product1_sku]["qty"] == expected_base_unit_qty_product1
 	assert store_inventory_snapshot[product1_sku]["unit"] == Unit.KG
 
-	assert store_inventory_snapshot[product2_sku]["qty"] == expected_base_unit_qty_product2,
+	assert store_inventory_snapshot[product2_sku]["qty"] == expected_base_unit_qty_product2
 	assert store_inventory_snapshot[product2_sku]["unit"] == Unit.TIN
 	
 	
@@ -100,7 +100,7 @@ async def test_receive_fails_on_negative_qty(sample_store):
 			
 @pytest.mark.asyncio
 async def test_fails_on_invalid_store_id(sample_store):
-	with pytest.raises(VaueError):
+	with pytest.raises(ValueError):
 		await sample_store.receive({
 		    "store_id": "random",
 			"received_entry_id": "test_receive",
@@ -112,12 +112,12 @@ async def test_fails_on_invalid_store_id(sample_store):
 		    "received_products": [
 				{
 					"sku": product1_sku,
-					"qty": qty_to_receive_product1,
+					"qty": 2,
 					"unit": Unit.BSKT
 				},
 				{
 					"sku": product2_sku,
-					"qty": qty_to_receive_product2,
+					"qty": 4,
 					"unit": Unit.CTN
 				}
 			]

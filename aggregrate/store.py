@@ -1,6 +1,7 @@
-feom typing import Dict
+from typing import Dict
 from uuid import uuid4
 from value_object.unit import Unit
+from value_object.qty_change_type import ChangeType
 from entity.product_inventory import ProductInventory
 from error import UnexistingProduct
 
@@ -12,7 +13,7 @@ class Store(object):
 		self._inventory_list = []
 	
 	
-	def create_product_inventory(self, sku: str, product_name: str, base_unit: Unit):
+	async def create_product_inventory(self, sku: str, product_name: str, base_unit: Unit):
 		self._inventory_list.append(ProductInventory(qty=0, sku=sku, product_name=product_name, base_unit=base_unit))
 	
 	
@@ -30,7 +31,7 @@ class Store(object):
 		product_inventory.add_supported_unit(unit = unit, conversion_factor = conversion_factor)
 	
 	
-	def receive(self, received_entry: Dict):
+	async def receive(self, received_entry: Dict):
 		id_of_store_to_receive = received_entry["store_id"]
 		if not id_of_store_to_receive == self.store_id:
 			raise ValueError(f"Invalid Store ID entered? Tried to receive goods for Store with id ({id_of_store_to_receive}) into Store with id ({self.store_id})")
@@ -40,7 +41,7 @@ class Store(object):
 			product_inventory.change_qty(qty=product["qty"], unit=product["unit"], change_type=ChangeType.RECEIVE)
 	
 	
-	def get_inventory_snapshot(self):
+	async def get_inventory_snapshot(self):
 		inventory_snapshot = {}
 		
 		for product_inventory in self._inventory_list:
@@ -56,11 +57,11 @@ class Store(object):
 		return inventory_snapshot
 	
 	
-	def get_stock_level(self, sku: str, unit: Unit):
+	async def get_stock_level(self, sku: str, unit: Unit):
 		product_inventory = self._get_product_inventory_by_sku(sku)
 		return product_inventory.get_qty(unit=unit)
 
 
 
-async def create_store(store_id:str=uuid4(), store_name:str):
+async def create_store(store_name:str, store_id:str=str(uuid4())):
 	return Store(store_id = store_id, store_name = store_name)
