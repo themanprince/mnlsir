@@ -32,13 +32,14 @@ class Store(object):
 	
 	
 	async def receive(self, received_entry: Dict):
-		id_of_store_to_receive = received_entry["store_id"]
-		if not id_of_store_to_receive == self.store_id:
-			raise ValueError(f"Invalid Store ID entered? Tried to receive goods for Store with id ({id_of_store_to_receive}) into Store with id ({self.store_id})")
-		
+		if "store_id" in received_entry and received_entry["store_id"] is not None:
+			id_of_store_to_receive = received_entry["store_id"]
+			if not id_of_store_to_receive == self.store_id:
+				raise ValueError(f"Invalid Store ID entered? Tried to receive goods for Store with id ({id_of_store_to_receive}) into Store with id ({self.store_id})")
+			
 		for product in received_entry["received_products"]:
 			product_inventory = self._get_product_inventory_by_sku(product["sku"])
-			product_inventory.change_qty(qty=product["qty"], unit=product["unit"], change_type=ChangeType.RECEIVE)
+			product_inventory.change_qty(qty=float(product["qty"]), unit=product["unit"], change_type=ChangeType.RECEIVE)
 	
 	
 	async def get_inventory_snapshot(self):

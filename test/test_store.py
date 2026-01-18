@@ -70,32 +70,54 @@ async def test_store_receiving(sample_store):
 	
 	
 	expected_qty_in_bags_product1 = expected_base_unit_qty_product1 / kg_to_bag
-	assert sample_store.get_stock_level(sku=product1_sku, unit=Unit.BAG) == pytest.approx(expected_qty_in_bags_product1)
+	actual_qty_in_bags_product1 = await sample_store.get_stock_level(sku=product1_sku, unit=Unit.BAG)
+	assert actual_qty_in_bags_product1 == pytest.approx(expected_qty_in_bags_product1)
 	
 	
 @pytest.mark.asyncio
 async def test_receive_fails_on_invalid_unit(sample_store):
 	with pytest.raises(UnsupportedUnitError):
 		await sample_store.receive({
-			product1_sku: {
-				"qty": 23,
-				"unit": Unit.CTN #This is not a supported unit for product1
+		"received_entry_id": "test_receive",
+	    "created_at": str(datetime.now()),
+	    "received_at": str(datetime.now()),
+	    "received_from": "RD Enterprises",
+	    "received_by": "Prince Adigwe",
+	    "purpose": None,
+	    "store_id": sample_store.store_id,
+	    "received_products": [
+			{
+				"sku": product1_sku,
+				"qty": 10,
+				"unit": Unit.CTN #invalid unit for product1
 			},
-			product2_sku: {
-				"qty": 44,
-				"unit": Unit.KG  #This is not a supported unit for product2
+			{
+				"sku": product2_sku,
+				"qty": 212,
+				"unit": Unit.BSKT  #invalid unit for product2
 			}
-		})
+		]
+	})
 			
 
 @pytest.mark.asyncio
 async def test_receive_fails_on_negative_qty(sample_store):
-	with pytest.raises(UnsupportedUnitError):
+	with pytest.raises(InvalidQtyError):	
 		await sample_store.receive({
-			product1_sku: {
-				"qty": -12,
-				"unit": Unit.KG #This is not a supported unit for product1
-			}
+			"received_entry_id": "test_receive",
+		    "created_at": str(datetime.now()),
+		    "received_at": str(datetime.now()),
+		    "received_from": "RD Enterprises",
+		    "received_by": "Prince Adigwe",
+		    "purpose": None,
+		    "store_id": sample_store.store_id,
+		    "received_products": [
+				{
+					"sku": product1_sku,
+					"qty": -10,
+					"unit": Unit.BSKT
+				}
+			]
 		})
 			
 @pytest.mark.asyncio
@@ -122,4 +144,30 @@ async def test_fails_on_invalid_store_id(sample_store):
 				}
 			]
 		})
-		
+
+
+@pytest.mark.asyncio
+async def test_receiving_works_wthout_specifying_store_id(sample_store):
+	qty_to_receive_product1 = 3
+	
+	await sample_store.receive({
+		"received_entry_id": "test_receive",
+	    "created_at": str(datetime.now()),
+	    "received_at": str(datetime.now()),
+	    "received_from": "RD Enterprises",
+	    "received_by": "Prince Adigwe",
+	    "purpose": None,
+	    "store_id": sample_store.store_id,
+	    "received_products": [
+			{
+				"sku": product1_sku,
+				"qty": qty_to_receive_product1,
+				"unit": Unit.BSKT
+			}
+		]
+	})
+
+	expected_base_unit_qty_product1 = kg_to_bskt * qty_to_receive_product1
+	expected_qty_in_bags_product1 = expected_base_unit_qty_product1 / kg_to_bag
+	actual_qty_in_bags_product1 = await sample_store.get_stock_level(sku=product1_sku, unit=Unit.BAG)
+	assert actual_qty_in_bags_product1 == pytest.approx(expected_qty_in_bags_product1)
