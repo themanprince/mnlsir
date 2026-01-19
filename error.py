@@ -12,3 +12,7 @@ class InvalidQtyError(Exception):
 
 class UnexistingProduct(Exception):
 	pass
+
+
+class AlreadyExistingProduct(Exception):
+	pass

@@ -4,7 +4,8 @@ from value_object.unit import Unit
 from value_object.qty_change_type import ChangeType
 from entity.product_inventory import ProductInventory
 from entity.product_stock_movement import ProductStockMovement
-from error import UnexistingProduct
+from error import UnexistingProduct, AlreadyExistingProduct
+
 
 
 class Store(object):
@@ -16,6 +17,10 @@ class Store(object):
 	
 	
 	async def create_product_inventory(self, sku: str, product_name: str, base_unit: Unit, opening_bal = 0):
+		product_inventory = next((product_inventory for product_inventory in self._inventory_list if product_inventory.sku == sku), None)
+		if product_inventory is not None:
+			raise AlreadyExistingProduct(f"Tried to create multiple inventories for product with sku ({sku})")
+		
 		self._inventory_list.append(ProductInventory(qty=opening_bal, sku=sku, product_name=product_name, base_unit=base_unit))
 		self._stock_movement_record[sku] = ProductStockMovement(sku=sku, opening_bal = opening_bal, base_unit = base_unit)
 		
